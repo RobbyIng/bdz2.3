@@ -14,7 +14,7 @@
 }
 
 .classForm {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 18px;
   display: flex;
   flex-direction: column;
@@ -46,4 +46,8 @@
   border: transparent;
   border-radius: 15px;
   margin-top: 1em;
+}
+.logInBtn:hover {
+  cursor: pointer;
+  box-shadow: 1px 1px 8px 8px rgb(200, 200, 150);
 }

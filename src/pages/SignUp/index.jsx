@@ -1,10 +1,11 @@
 import { Formik, Field, Form } from 'formik'
 import * as Yup from 'yup'
-import { signUpFetch } from '../../api/user'
+import { signInFetch, signUpFetch } from '../../api/user'
 import { TOKEN } from '../../utils/constants'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import styles from './index.module.css'
+import { useMutation } from '@tanstack/react-query'
 
 const signUpSchema = Yup.object().shape({
   email: Yup.string().email('Некорректный email').required('Required'),
@@ -26,16 +27,57 @@ export const SignUp = () => {
     group: '',
   }
 
+  const {
+    mutateAsync: mutateSignUp,
+    isError: isErrSignUp,
+    isLoading: isLoadSignUp,
+    error: errorSignUp,
+  } = useMutation({
+    mutationFn: async (values) => {
+      const res = await signUpFetch(values)
+      if (res.status) console.log(res.status)
+      if (res.ok) {
+        const responce = await res.json()
+        return responce
+      }
+      if (isLoadSignUp) return <p>Идет загрузка...</p>
+      if (isErrSignUp) return <p>Произошла ошибка: {errorSignUp}</p>
+      return false
+    },
+  })
+
+  const {
+    mutateAsync: mutateSignIn,
+    isError: isErrSignIn,
+    isLoading: isLoadSignIn,
+    error: errorSignIn,
+  } = useMutation({
+    mutationFn: async (values) => {
+      const res = await signInFetch(values)
+      if (res.ok) {
+        const responce = await res.json()
+        return responce
+      }
+      if (isLoadSignIn) return <p>Идет загрузка...</p>
+      if (isErrSignIn) return <p>Произошла ошибка: {errorSignIn}</p>
+      return false
+    },
+  })
+
   const onSubmit = async (values) => {
-    const res = await signUpFetch(values)
-    if (res.ok) {
-      const responce = await res.json()
-      localStorage.setItem(TOKEN, responce.token)
-      console.log(responce)
+    const res = await mutateSignUp(values)
+    if (res) {
+      const { group, ...valuesSignIn } = values
+      console.log(valuesSignIn)
+      const resIn = await mutateSignIn(valuesSignIn)
+      if (resIn) {
+        localStorage.setItem(TOKEN, resIn.token)
+
+        return navigate('/products')
+      }
       return navigate('/signin')
     }
-    console.log(`не прошел ${res}`)
-    // return
+    return false
   }
 
   return (
