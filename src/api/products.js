@@ -20,3 +20,16 @@ export const fetchCurrentProduct = async (token, params) => {
     return responce
   }
 }
+
+export const fetchCreateProduct = async (token, values) => {
+  const res = await fetch(`https://api.react-learning.ru/products`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  if (res.ok) {
+    const responce = await res.json()
+    return responce
+  }
+}

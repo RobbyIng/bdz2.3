@@ -8,6 +8,7 @@ export const CurrentProduct = () => {
   const { idOfProduct } = useParams()
 
   const navigate = useNavigate()
+
   const {
     data: prodCurrentItem,
     isLoading,

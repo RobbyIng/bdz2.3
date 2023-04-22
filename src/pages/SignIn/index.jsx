@@ -25,14 +25,15 @@ export const SignIn = () => {
     password: '',
   }
 
-  const { mutateAsync, isError, isLoading } = useMutation({
+  const { mutateAsync, isError, isLoading, error } = useMutation({
     mutationFn: async (values) => {
       const res = await signInFetch(values)
       if (res.ok) {
         const responce = await res.json()
         return responce
       }
-
+      if (isLoading) return <p>Идет загрузка...</p>
+      if (isError) return <p>Произошла ошибка: {error}</p>
       return false
     },
   })
