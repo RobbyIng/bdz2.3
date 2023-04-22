@@ -1,29 +1,15 @@
-export const fetchDataProducts = async (setItems, token) => {
+export const fetchDataProducts = async (token) => {
   const res = await fetch('https://api.react-learning.ru/products', {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   })
-  let responce = {}
-  if (res.ok) {
-    responce = await res.json()
-    setItems(responce)
-  } else {
-    let answer = ''
-    if (res.status > 499) answer = 'Ошибка сервера'
-    else if (res.status > 399) {
-      if (res.status === 401) answer = 'Ошибка авторизации'
-      else answer = 'Ошибка запроса пользователя'
-    }
-    responce = { message: answer }
-  }
+  const responce = await res.json()
+  return responce
 }
+// }
 
-export const fetchCurrentProduct = async (
-  setprodCurrentItem,
-  token,
-  params
-) => {
+export const fetchCurrentProduct = async (token, params) => {
   const res = await fetch(`https://api.react-learning.ru/products/${params}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -31,6 +17,19 @@ export const fetchCurrentProduct = async (
   })
   if (res.ok) {
     const responce = await res.json()
-    setprodCurrentItem(responce)
+    return responce
+  }
+}
+
+export const fetchCreateProduct = async (token, values) => {
+  const res = await fetch(`https://api.react-learning.ru/products`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  if (res.ok) {
+    const responce = await res.json()
+    return responce
   }
 }

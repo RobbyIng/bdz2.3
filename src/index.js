@@ -11,6 +11,9 @@ import { ProductList } from './components/ProductList'
 import { LikedList } from './pages/Liked'
 import { BasketList } from './pages/BasketList'
 import { CurrentProduct } from './pages/CurrentProduct'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
   {
@@ -56,6 +59,8 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </React.StrictMode>
 )
